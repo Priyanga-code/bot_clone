@@ -158,6 +158,9 @@ def delete_log():
     conn.close()
     return render_template("delete_log.html", r="All user logs have been deleted.")
 
+@app.route("/sepia", methods=["GET", "POST"])
+def sepia():
+    return render_template("sepia.html")
 
 if __name__ == "__main__":
     app.run()
