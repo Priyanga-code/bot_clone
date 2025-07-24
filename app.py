@@ -133,6 +133,32 @@ def webhook():
         })
     return('ok', 200)
 
+import sqlite3
+
+@app.route("/user_log", methods=["GET", "POST"])
+def user_log():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM user')
+    rows = c.fetchall()
+    c.close()
+    conn.close()
+
+    # Convert rows to a string to display in template, or format as you like
+    log_str = "\n".join([f"{row[0]} - {row[1]}" for row in rows]) if rows else "No logs found."
+    return render_template("user_log.html", r=log_str)
+
+@app.route("/delete_log", methods=["GET", "POST"])
+def delete_log():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM user')
+    conn.commit()
+    c.close()
+    conn.close()
+    return render_template("delete_log.html", r="All user logs have been deleted.")
+
+
 if __name__ == "__main__":
     app.run()
 
